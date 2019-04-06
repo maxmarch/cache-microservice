@@ -1,4 +1,4 @@
-package com.mpoznyak.cache;
+package com.mpoznyak.cache.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -24,7 +24,7 @@ import java.time.Duration;
 @EnableCaching
 @Configuration
 @PropertySource("classpath:application.properties")
-public class Config extends CachingConfigurerSupport {
+public class CacheConfig extends CachingConfigurerSupport {
 
     @Autowired
     private Environment env;

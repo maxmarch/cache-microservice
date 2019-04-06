@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 
 @Service
-public class CacheServiceImpl implements BaseCacheService {
+public class BaseCacheServiceImpl implements BaseCacheService {
 
     @Override
     public Item save(Item entity) {
@@ -67,4 +67,5 @@ public class CacheServiceImpl implements BaseCacheService {
     public void deleteAll() {
 
     }
+
 }
