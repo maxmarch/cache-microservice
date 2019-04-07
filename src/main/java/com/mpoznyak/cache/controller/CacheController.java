@@ -5,6 +5,7 @@ import com.mpoznyak.cache.model.Item;
 import com.mpoznyak.cache.service.BaseCacheService;
 import com.mpoznyak.cache.util.CollectionsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,22 +29,24 @@ public class CacheController {
     private static final Item EMPTY_ITEM = new Item();
 
     @GetMapping("/item/{id}")
-    public ResponseEntity<Item> getItemById(@PathVariable("id") Long id) {
-        Item item = cacheService.findById(id).orElse(EMPTY_ITEM);
+    public ResponseEntity<ItemDto> getItemById(@PathVariable("id") Long id) {
+        ItemDto item = cacheService.findById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
     @GetMapping("/item/")
-    public ResponseEntity<List<Item>> findAll() {
-        Iterable<Item> itemsIterable = cacheService.findAll();
-        List<Item> itemsList = CollectionsUtil.iterableToList(itemsIterable);
+    public ResponseEntity<List<ItemDto>> findAll() {
+        List<ItemDto> itemsList = cacheService.findAll();
         return new ResponseEntity<>(itemsList, HttpStatus.OK);
     }
 
-//    @PostMapping("/item")
-//    public ResponseEntity<Void> addItem(@RequestBody ItemDto item, UriComponentsBuilder builder) {
-//
-//    }
+    @PostMapping("/item")
+    public ResponseEntity<Void> addItem(@RequestBody ItemDto itemDto, UriComponentsBuilder builder) {
+        ItemDto savedItemDto = cacheService.save(itemDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(builder.path("/item/{id}").buildAndExpand(savedItemDto.getId()).toUri());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
 
     @Autowired
     public void setCacheService(BaseCacheService cacheService) {

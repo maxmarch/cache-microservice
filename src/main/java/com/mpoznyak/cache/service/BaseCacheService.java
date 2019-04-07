@@ -1,12 +1,14 @@
 package com.mpoznyak.cache.service;
 
+import com.mpoznyak.cache.dto.ItemDto;
 import com.mpoznyak.cache.model.Item;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BaseCacheService {
 
-    Item save(Item entity);
+    ItemDto save(ItemDto entity);
 
     /**
      * Saves all given entities.
@@ -15,7 +17,7 @@ public interface BaseCacheService {
      * @return the saved entities will never be {@literal null}.
      * @throws IllegalArgumentException in case the given entity is {@literal null}.
      */
-    Iterable<Item> saveAll(Iterable<Item> entities);
+    List<ItemDto> saveAll(List<ItemDto> entities);
 
     /**
      * Retrieves an entity by its id.
@@ -24,7 +26,7 @@ public interface BaseCacheService {
      * @return the entity with the given id or {@literal Optional#empty()} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}.
      */
-    Optional<Item> findById(Long id);
+    ItemDto findById(Long id);
 
     /**
      * Returns whether an entity with the given id exists.
@@ -40,7 +42,7 @@ public interface BaseCacheService {
      *
      * @return all entities
      */
-    Iterable<Item> findAll();
+    List<ItemDto> findAll();
 
     /**
      * Returns all instances of the type with the given IDs.
@@ -48,7 +50,7 @@ public interface BaseCacheService {
      * @param ids
      * @return
      */
-    Iterable<Item> findAllById(Iterable<Long> ids);
+    List<ItemDto> findAllById(List<Long> ids);
 
     /**
      * Returns the number of entities available.
@@ -71,7 +73,7 @@ public interface BaseCacheService {
      * @param entity
      * @throws IllegalArgumentException in case the given entity is {@literal null}.
      */
-    void delete(Item entity);
+    void delete(ItemDto entity);
 
     /**
      * Deletes the given entities.
@@ -79,7 +81,7 @@ public interface BaseCacheService {
      * @param entities
      * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
      */
-    void deleteAll(Iterable<? extends Item> entities);
+    void deleteAll(List<ItemDto> entities);
 
     /**
      * Deletes all entities managed by the repository.
