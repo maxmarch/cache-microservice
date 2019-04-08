@@ -88,5 +88,4 @@ public interface BaseCacheService {
      */
     void deleteAll();
 
-    void update(ItemDto itemDto);
 }

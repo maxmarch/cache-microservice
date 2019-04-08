@@ -1,35 +1,31 @@
-package com.mpoznyak.cache.service.impl;
+package com.mpoznyak.cache.dao.impl;
 
+import com.mpoznyak.cache.dao.BaseCacheRepository;
 import com.mpoznyak.cache.model.Item;
-import com.mpoznyak.cache.service.BaseCacheService;
-import org.springframework.stereotype.Service;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-/**
- * Created by mpoznyak on 04.04.2019
- */
+public class CacheRepositoryImpl implements CrudRepository<Item, Long>, BaseCacheRepository {
 
-@Service
-public class BaseCacheServiceImpl implements BaseCacheService {
 
     @Override
-    public Item save(Item entity) {
+    public <S extends Item> S save(S entity) {
         return null;
     }
 
     @Override
-    public Iterable<Item> saveAll(Iterable<Item> entities) {
+    public <S extends Item> Iterable<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public Optional<Item> findById(Long id) {
+    public Optional<Item> findById(Long aLong) {
         return Optional.empty();
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(Long aLong) {
         return false;
     }
 
@@ -39,7 +35,7 @@ public class BaseCacheServiceImpl implements BaseCacheService {
     }
 
     @Override
-    public Iterable<Item> findAllById(Iterable<Long> ids) {
+    public Iterable<Item> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -49,7 +45,7 @@ public class BaseCacheServiceImpl implements BaseCacheService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long aLong) {
 
     }
 
@@ -67,5 +63,4 @@ public class BaseCacheServiceImpl implements BaseCacheService {
     public void deleteAll() {
 
     }
-
 }
