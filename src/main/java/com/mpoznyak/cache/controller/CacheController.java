@@ -46,7 +46,7 @@ public class CacheController extends BaseController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/item")
     public ResponseEntity<ItemDto> updateItem(@RequestBody ItemDto itemDto) {
         cacheService.update(itemDto);
         return new ResponseEntity<>(itemDto, HttpStatus.OK);

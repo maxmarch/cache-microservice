@@ -33,7 +33,7 @@ public class CacheServiceImpl implements GenericService {
     public ItemDto add(ItemDto itemDto) {
         Item item = ITEM_MAPPER.map(itemDto);
         Item savedItem = cacheRepository.save(item);
-        return ITEM_MAPPER.map(savedItem);
+        return null;
     }
 
     @Override
