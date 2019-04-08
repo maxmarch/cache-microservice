@@ -14,6 +14,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 import java.time.Duration;
 
@@ -22,7 +23,7 @@ import java.time.Duration;
  */
 
 @EnableCaching
-@Configuration
+//@Configuration
 @PropertySource("classpath:application.properties")
 public class CacheConfig extends CachingConfigurerSupport {
 

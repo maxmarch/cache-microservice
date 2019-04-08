@@ -6,9 +6,9 @@ import com.mpoznyak.cache.model.Item;
 import java.util.List;
 import java.util.Optional;
 
-public interface BaseCacheService {
+public interface GenericService {
 
-    ItemDto save(ItemDto entity);
+    ItemDto add(ItemDto entity);
 
     /**
      * Saves all given entities.
@@ -17,7 +17,7 @@ public interface BaseCacheService {
      * @return the saved entities will never be {@literal null}.
      * @throws IllegalArgumentException in case the given entity is {@literal null}.
      */
-    List<ItemDto> saveAll(List<ItemDto> entities);
+    List<ItemDto> addAll(List<ItemDto> entities);
 
     /**
      * Retrieves an entity by its id.

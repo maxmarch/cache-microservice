@@ -1,27 +1,43 @@
 package com.mpoznyak.cache.service.impl;
 
 import com.mpoznyak.cache.dto.ItemDto;
+import com.mpoznyak.cache.mapper.impl.ItemMapperImpl;
 import com.mpoznyak.cache.model.Item;
-import com.mpoznyak.cache.service.BaseCacheService;
+import com.mpoznyak.cache.repository.CacheRepository;
+import com.mpoznyak.cache.service.GenericService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by mpoznyak on 04.04.2019
  */
 
 @Service
-public class BaseCacheServiceImpl implements BaseCacheService {
+public class CacheServiceImpl implements GenericService {
+
+    @Autowired
+    private CacheRepository cacheRepository;
+
+    private static final ItemMapperImpl ITEM_MAPPER = new ItemMapperImpl();
 
     @Override
-    public ItemDto save(ItemDto entity) {
-        return null;
+    @Caching(
+            put = {@CachePut(value = "value", key = "#itemDto.id")},
+            evict = {@CacheEvict(value = "value", key = "#itemDto.id")}
+    )
+    public ItemDto add(ItemDto itemDto) {
+        Item item = ITEM_MAPPER.map(itemDto);
+        Item savedItem = cacheRepository.save(item);
+        return ITEM_MAPPER.map(savedItem);
     }
 
     @Override
-    public List<ItemDto> saveAll(List<ItemDto> entities) {
+    public List<ItemDto> addAll(List<ItemDto> entities) {
         return null;
     }
 

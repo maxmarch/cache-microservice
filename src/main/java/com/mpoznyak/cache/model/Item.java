@@ -1,5 +1,7 @@
 package com.mpoznyak.cache.model;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,18 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@Entity
-//@Table("items")
-public class Item implements Serializable {
+@RedisHash("items")
+public class Item {
 
     private static final long serialVersionsUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "item_id")
     private Long id;
 
-    @Column(name = "item_value")
     private String value;
 
     public Long getId() {

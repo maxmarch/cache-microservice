@@ -1,9 +1,7 @@
 package com.mpoznyak.cache.controller;
 
 import com.mpoznyak.cache.dto.ItemDto;
-import com.mpoznyak.cache.model.Item;
-import com.mpoznyak.cache.service.BaseCacheService;
-import com.mpoznyak.cache.util.CollectionsUtil;
+import com.mpoznyak.cache.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,7 @@ import java.util.List;
 @RestController
 public class CacheController {
 
-    private BaseCacheService cacheService;
+    private GenericService cacheService;
 
     @GetMapping("/item/{id}")
     public ResponseEntity<ItemDto> findItemById(@PathVariable("id") Long id) {
@@ -42,7 +40,7 @@ public class CacheController {
 
     @PostMapping("/item")
     public ResponseEntity<Void> addItem(@RequestBody ItemDto itemDto, UriComponentsBuilder builder) {
-        ItemDto savedItemDto = cacheService.save(itemDto);
+        ItemDto savedItemDto = cacheService.add(itemDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/item/{id}").buildAndExpand(savedItemDto.getId()).toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
@@ -62,7 +60,7 @@ public class CacheController {
     }
 
     @Autowired
-    public void setCacheService(BaseCacheService cacheService) {
+    public void setCacheService(GenericService cacheService) {
         this.cacheService = cacheService;
     }
 

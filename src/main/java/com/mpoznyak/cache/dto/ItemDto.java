@@ -1,9 +1,11 @@
 package com.mpoznyak.cache.dto;
 
-public class ItemDto {
+import java.io.Serializable;
 
-    public Long id;
-    public String value;
+public class ItemDto implements Serializable {
+
+    private Long id;
+    private String value;
 
     public Long getId() {
         return id;
