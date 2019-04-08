@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @RestController
-public class CacheController {
+public class CacheController extends BaseController {
 
     private GenericService cacheService;
 
