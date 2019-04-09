@@ -2,6 +2,8 @@ package com.mpoznyak.cache.controller;
 
 import com.mpoznyak.cache.dto.ItemDto;
 import com.mpoznyak.cache.service.GenericService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,9 @@ public class CacheController extends BaseController {
     @GetMapping("/item/{id}")
     public ResponseEntity<ItemDto> findItemById(@PathVariable("id") Long id) {
         ItemDto item = cacheService.findById(id);
+        if (item.getId() == null) {
+            return new ResponseEntity<>(item, HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 

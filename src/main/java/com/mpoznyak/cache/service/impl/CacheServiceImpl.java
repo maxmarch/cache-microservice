@@ -8,9 +8,11 @@ import com.mpoznyak.cache.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,26 +26,43 @@ public class CacheServiceImpl implements GenericService {
     private CacheRepository cacheRepository;
 
     private static final ItemMapperImpl ITEM_MAPPER = new ItemMapperImpl();
+    private static final ItemDto EMPTY_ITEM = new ItemDto();
 
     @Override
     @Caching(
-            put = {@CachePut(value = "value", key = "#itemDto.id")},
-            evict = {@CacheEvict(value = "value", key = "#itemDto.id")}
+            put = {@CachePut(value = "itemValue", key = "#itemDto.id")},
+            evict = {@CacheEvict(value = "itemValue", key = "#itemDto.id")}
     )
     public ItemDto add(ItemDto itemDto) {
         Item item = ITEM_MAPPER.map(itemDto);
         Item savedItem = cacheRepository.save(item);
-        return null;
+        return ITEM_MAPPER.map(savedItem);
+    }
+
+    /**
+     * Add all items. Used {@link CacheServiceImpl#add(ItemDto)} for final persisting data and caching it.
+     * @param items items to persist
+     * @return result list of items saved in cache
+     */
+    @Override
+    public List<ItemDto> addAll(List<ItemDto> items) {
+        List<ItemDto> itemsSaved = new ArrayList<>();
+        for (ItemDto itemDto : items) {
+            ItemDto itemSavedDto = add(itemDto);
+            itemsSaved.add(itemSavedDto);
+
+        }
+        return itemsSaved;
     }
 
     @Override
-    public List<ItemDto> addAll(List<ItemDto> entities) {
-        return null;
-    }
-
-    @Override
+    @Cacheable(value = "itemValue", key = "#id")
     public ItemDto findById(Long id) {
-        return null;
+        Item item = cacheRepository.findById(id).orElse(null);
+        if (item == null) {
+            return EMPTY_ITEM;
+        }
+        return ITEM_MAPPER.map(item);
     }
 
     @Override
