@@ -1,24 +1,27 @@
 package com.mpoznyak.cache.mapper.impl;
 
 import com.mpoznyak.cache.dto.ItemDto;
+import com.mpoznyak.cache.mapper.GenericMapper;
 import com.mpoznyak.cache.model.Item;
 import org.springframework.stereotype.Component;
 
-public class ItemMapperImpl {
+import java.util.ArrayList;
+import java.util.List;
 
+public class ItemMapperImpl extends GenericMapper<ItemDto,Item> {
 
-    public ItemDto map(Item e) {
-        ItemDto d = new ItemDto();
-        d.setId(e.getId());
-        d.setValue(e.getValue());
-        return d;
+    @Override
+    public ItemDto map(Item item) {
+        ItemDto itemDto = new ItemDto();
+        itemDto.setId(item.getId());
+        itemDto.setValue(item.getValue());
+        return itemDto;
     }
 
     public Item map(ItemDto d) {
-        Item e = new Item();
-        e.setId(d.getId());
-        e.setValue(d.getValue());
-        return e;
+        Item item = new Item();
+        item.setId(d.getId());
+        item.setValue(item.getValue());
+        return item;
     }
-
 }

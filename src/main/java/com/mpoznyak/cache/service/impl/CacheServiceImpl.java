@@ -5,6 +5,7 @@ import com.mpoznyak.cache.mapper.impl.ItemMapperImpl;
 import com.mpoznyak.cache.model.Item;
 import com.mpoznyak.cache.repository.CacheRepository;
 import com.mpoznyak.cache.service.GenericService;
+import com.mpoznyak.cache.util.CollectionsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +43,7 @@ public class CacheServiceImpl implements GenericService {
 
     /**
      * Add all items. Used {@link CacheServiceImpl#add(ItemDto)} for final persisting data and caching it.
+     *
      * @param items items to persist
      * @return result list of items saved in cache
      */
@@ -67,46 +70,63 @@ public class CacheServiceImpl implements GenericService {
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+        return cacheRepository.existsById(id);
     }
 
     @Override
     public List<ItemDto> findAll() {
-        return null;
+        Iterable iterableItems = cacheRepository.findAll();
+        List<Item> itemList = CollectionsUtil.iterableToList(iterableItems);
+        return ITEM_MAPPER.map(itemList);
+
     }
 
     @Override
     public List<ItemDto> findAllById(List<Long> ids) {
-        return null;
+        Iterable<Item> iterableItems = cacheRepository.findAllById(ids);
+        List<Item> itemList = CollectionsUtil.iterableToList(iterableItems);
+        return ITEM_MAPPER.map(itemList);
     }
 
     @Override
     public long count() {
-        return 0;
+        return cacheRepository.count();
     }
 
     @Override
+    @CacheEvict(value = "itemValue", key = "#id")
     public void deleteById(Long id) {
-
+        cacheRepository.deleteById(id);
     }
 
     @Override
-    public void delete(ItemDto entity) {
-
+    @CacheEvict(value = "itemValue")
+    public void delete(ItemDto itemDto) {
+        Item item = ITEM_MAPPER.map(itemDto);
+        cacheRepository.delete(item);
     }
 
     @Override
-    public void deleteAll(List<ItemDto> entities) {
-
-    }
-
-    @Override
+    @CacheEvict(value = "itemValue", allEntries = true)
     public void deleteAll() {
+        cacheRepository.deleteAll();
+    }
 
+    @Override
+    public void deleteAll(List<ItemDto> itemDtos) {
+        List<Item> items = new ArrayList<>();
+        for (ItemDto dto : itemDtos) {
+            Item item = new Item();
+            item.setId(dto.getId());
+            item.setValue(dto.getValue());
+            items.add(item);
+        }
+        cacheRepository.deleteAll(items);
     }
 
     @Override
     public void update(ItemDto itemDto) {
-
+        Item item = ITEM_MAPPER.map(itemDto);
+        cacheRepository.save(item);
     }
 }

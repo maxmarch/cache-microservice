@@ -28,8 +28,11 @@ public class CacheController extends BaseController {
 
     private GenericService cacheService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheController.class);
+
     @GetMapping("/item/{id}")
     public ResponseEntity<ItemDto> findItemById(@PathVariable("id") Long id) {
+        LOGGER.info("CACHE TOUCHED!");
         ItemDto item = cacheService.findById(id);
         if (item.getId() == null) {
             return new ResponseEntity<>(item, HttpStatus.NO_CONTENT);
